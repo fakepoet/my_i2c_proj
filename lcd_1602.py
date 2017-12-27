@@ -72,13 +72,18 @@ class LCD1206(object):
 
     def lcd_string(self, message, line):
         # Send string to display
-        for message in message.split('\n'):
-            message = message.ljust(LCD_WIDTH, " ")
+        message = message.ljust(LCD_WIDTH, " ")
 
-            self.lcd_byte(line, LCD_CMD)
+        self.lcd_byte(line, LCD_CMD)
 
-            for i in range(LCD_WIDTH):
-                self.lcd_byte(ord(message[i]), LCD_CHR)
+        for i in range(LCD_WIDTH):
+            self.lcd_byte(ord(message[i]), LCD_CHR)
+
+    def lcd_message(self, message):
+        from itertools import izip
+        msg_list = message.split('\n')[:2]
+        for msg, line in izip(msg_list, [LCD_LINE_1, LCD_LINE_2]):
+            self.lcd_string(msg, line)
 
     def lcd_clear(self):
         self.lcd_byte(0x01, LCD_CMD)
@@ -99,7 +104,7 @@ class LCD1206(object):
             ):
                 msg = func()
                 self.lcd_clear()
-                self.lcd_string(msg)
+                self.lcd_message(msg)
                 time.sleep(delay)
 
 
@@ -108,7 +113,7 @@ if __name__ == '__main__':
     # Initialise display
     dev = LCD1206()
     dev.lcd_init()
-    dev.lcd_string('Hello,\n        Master')
+    dev.lcd_message('Hello,\n        Master')
     try:
         dev.lcd_status_cycle()
     except KeyboardInterrupt:
