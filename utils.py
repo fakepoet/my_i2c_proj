@@ -13,8 +13,8 @@ def get_cpu_temp():
 
     gpu_tmp = commands.getoutput('vcgencmd measure_temp|awk -F= \'{print $2}\'').replace('\'C', '')
     gpu_tmp = float(gpu_tmp)
-    gpu_temp = 'GPU_TMP: {:.2f} C'.format(gpu_tmp)
-    cpu_temp = 'CPU_TMP: {:.2f} C\n'.format(float(cpu_tmp) / 1000)
+    gpu_temp = 'GPU_TMP: {:.2f}{}C'.format(gpu_tmp, chr(0xDF))
+    cpu_temp = 'CPU_TMP: {:.2f}{}C\n'.format(float(cpu_tmp) / 1000, chr(0xDF))
     return cpu_temp + gpu_temp
 
 
