@@ -89,13 +89,14 @@ class LCD1206(object):
         self.lcd_byte(0x01, LCD_CMD)
 
     def lcd_cycle(self, *cls_list, **kwargs):
-        from utils import get_all_methods
+        from utils import get_methods_list
         delay = kwargs.get('delay') or C_DELAY
         while True:
             for data_class in cls_list:
                 st = data_class()
-                for func_name in get_all_methods(cls_list):
-                    msg = getattr(st, func_name)
+                for func_name in get_methods_list(data_class):
+                    print func_name
+                    msg = getattr(st, func_name)()
                     self.lcd_clear()
                     self.lcd_message(msg)
                     time.sleep(delay)
@@ -115,5 +116,7 @@ if __name__ == '__main__':
         dev.lcd_cycle(Statuses, SensorData)
     except KeyboardInterrupt:
         pass
+    except Exception:
+        raise
     finally:
         dev.lcd_byte(0x01, LCD_CMD)
