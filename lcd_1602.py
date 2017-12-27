@@ -95,7 +95,6 @@ class LCD1206(object):
             for data_class in cls_list:
                 st = data_class()
                 for func_name in get_methods_list(data_class):
-                    print func_name
                     msg = getattr(st, func_name)()
                     self.lcd_clear()
                     self.lcd_message(msg)
