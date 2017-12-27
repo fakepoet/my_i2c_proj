@@ -107,13 +107,17 @@ class LCD1206(object):
                 self.lcd_message(msg)
                 time.sleep(delay)
 
+    def lcd_greet(self, msg=None, delay=C_DELAY):
+        self.lcd_message(msg or 'Hello,\n        Master')
+        time.sleep(delay)
+
 
 if __name__ == '__main__':
 
     # Initialise display
     dev = LCD1206()
     dev.lcd_init()
-    dev.lcd_message('Hello,\n        Master')
+    dev.greet()
     try:
         dev.lcd_status_cycle()
     except KeyboardInterrupt:
