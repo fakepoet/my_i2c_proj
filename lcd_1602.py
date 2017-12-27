@@ -89,11 +89,11 @@ class LCD1206(object):
         self.lcd_byte(0x01, LCD_CMD)
 
     def lcd_status_cycle(self, delay=C_DELAY):
-        from .utils import (get_time_now,
-                            get_ip_info,
-                            get_cpu_temp,
-                            get_cpu_usage,
-                            get_mem_info,)
+        from utils import (get_time_now,
+                           get_ip_info,
+                           get_cpu_temp,
+                           get_cpu_usage,
+                           get_mem_info,)
         while True:
             for func in (
                 get_time_now,
