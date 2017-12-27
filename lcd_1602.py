@@ -88,24 +88,17 @@ class LCD1206(object):
     def lcd_clear(self):
         self.lcd_byte(0x01, LCD_CMD)
 
-    def lcd_status_cycle(self, delay=C_DELAY):
-        from utils import (get_time_now,
-                           get_ip_info,
-                           get_cpu_temp,
-                           get_cpu_usage,
-                           get_mem_info,)
+    def lcd_cycle(self, *cls_list, **kwargs):
+        from utils import get_all_methods
+        delay = kwargs.get('delay') or C_DELAY
         while True:
-            for func in (
-                get_time_now,
-                get_ip_info,
-                get_cpu_temp,
-                get_cpu_usage,
-                get_mem_info,
-            ):
-                msg = func()
-                self.lcd_clear()
-                self.lcd_message(msg)
-                time.sleep(delay)
+            for data_class in cls_list:
+                st = data_class()
+                for func_name in get_all_methods(cls_list):
+                    msg = getattr(st, func_name)
+                    self.lcd_clear()
+                    self.lcd_message(msg)
+                    time.sleep(delay)
 
     def lcd_greet(self, msg=None, delay=C_DELAY):
         self.lcd_message(msg or 'Hello,\n        Master')
@@ -113,13 +106,13 @@ class LCD1206(object):
 
 
 if __name__ == '__main__':
-
+    from utils import Statuses, SensorData
     # Initialise display
     dev = LCD1206()
     dev.lcd_init()
     dev.lcd_greet()
     try:
-        dev.lcd_status_cycle()
+        dev.lcd_cycle(Statuses, SensorData)
     except KeyboardInterrupt:
         pass
     finally:
