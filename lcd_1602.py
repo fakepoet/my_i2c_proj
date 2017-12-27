@@ -108,7 +108,7 @@ if __name__ == '__main__':
     # Initialise display
     dev = LCD1206()
     dev.lcd_init()
-    dev.message('Hello,\n        Master')
+    dev.lcd_string('Hello,\n        Master')
     try:
         dev.lcd_status_cycle()
     except KeyboardInterrupt:
