@@ -30,7 +30,7 @@ E_DELAY = 0.0005
 C_DELAY = 5
 
 
-class LCD1206(object):
+class LCD1602(object):
     def __init__(self, addr=I2C_ADDR1):
         # Open I2C interface
         # bus = smbus.SMBus(0)  # Rev 1 Pi uses 0
@@ -92,7 +92,7 @@ class LCD1206(object):
 
     def lcd_cycle(self, *cls_list, **kwargs):
         while True:
-            LCD1206.cycle_cls_list(self, *cls_list, **kwargs)
+            LCD1602.cycle_cls_list(self, *cls_list, **kwargs)
 
     @staticmethod
     def cycle_cls_list(lcd, cls_list, delay=C_DELAY):
@@ -115,7 +115,7 @@ class LCD1206(object):
     def multi_lcd_cycle(lcd_list):
         while True:
             for lcd, cls_list in lcd_list:
-                LCD1206.cycle_cls_list(lcd, cls_list)
+                LCD1602.cycle_cls_list(lcd, cls_list)
 
     def lcd_greet(self, msg=None, delay=C_DELAY):
         self.lcd_message(msg or 'Hello,\n        Master')
@@ -125,14 +125,16 @@ class LCD1206(object):
 if __name__ == '__main__':
     from utils import Statuses, SensorData
     # Initialise display
-    lcd1 = LCD1206()
-    lcd2 = LCD1206(I2C_ADDR2)
+    lcd1 = LCD1602()
+    lcd2 = LCD1602(I2C_ADDR2)
+    lcd1.lcd_init()
+    lcd2.lcd_init()
     msg1 = 'DISPLAY_TYPE:\n' + 'STATUSES'.rjust(LCD_WIDTH)
     msg2 = 'DISPLAY_TYPE:\n' + 'SENSOR_DATA'.rjust(LCD_WIDTH)
-    LCD1206.multi_lcd_greet([(lcd1, msg1), (lcd2, msg2)])
+    LCD1602.multi_lcd_greet([(lcd1, msg1), (lcd2, msg2)])
     lcd_list = [(lcd1, (Statuses,)), (lcd2, (SensorData,))]
     try:
-        LCD1206.multi_lcd_cycle(lcd_list)
+        LCD1602.multi_lcd_cycle(lcd_list)
     except KeyboardInterrupt:
         pass
     except Exception:
