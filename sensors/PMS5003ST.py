@@ -11,6 +11,7 @@ class PMS5003(object):
             # 获得接收缓冲区字符
             self.ser = serial.Serial("/dev/ttyS0", 9600)
             count = self.ser.inWaiting()
+            print count
             if count >= 32:
                 recv = self.ser.read(32)
                 print recv
