@@ -9,13 +9,9 @@ class PMS5003(object):
     def get_data():
         def check_data(sign1, sign2, recv):
             data_list = list(struct.unpack('>' + 'B' * 36 + 'H', recv))
-            print 'data_list: %s' % data_list
             check_flag = data_list.pop()
-            print 'check_flag: %s' % check_flag
             data_list.append(sign1)
             data_list.append(sign2)
-            print 'data_list: %s' % data_list
-            print sum(data_list)
             if sum(data_list) != check_flag:
                 return False
             return True
@@ -33,7 +29,7 @@ class PMS5003(object):
 
             recv = ser.read(38)
             if not check_data(ord(sign1), ord(sign2), recv):
-                print 'check failed.'
+                continue
             (frame_length, pm1_0_cf, pm2_5_cf, pm10_cf, pm1_0,
              pm2_5, pm10, cnt_03, cnt_05, cnt_10, cnt_25, cnt_50, cnt_100,
              hcho, temp, humidity, reserve, version, checksum) = struct.unpack('>' + 'H' * 19, recv)
