@@ -76,6 +76,13 @@ class SensorData(object):
             humidity = 'Humidity: {}'.format(humidity)
             return temp + humidity
         else:
+            for _ in range(15):
+                res, data = self.dht_12.read_data()
+                if res:
+                    humidity, temp = data
+                    temp = 'Temp_DHT: {}\n'.format(temp)
+                    humidity = 'Humidity: {}'.format(humidity)
+                    return temp + humidity
             msg = data
             return msg
 
