@@ -125,7 +125,8 @@ class LCD1602(object):
 if __name__ == '__main__':
     from utils import Statuses, SensorData, PMS5003
     # Initialise display
-    delay = int(raw_input())
+    import sys
+    delay = int(sys.argv[1])
     lcd1 = LCD1602()
     lcd2 = LCD1602(I2C_ADDR2)
     lcd1.lcd_init()
