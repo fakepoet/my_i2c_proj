@@ -106,10 +106,10 @@ class LCD1602(object):
                 time.sleep(delay)
 
     @staticmethod
-    def multi_lcd_greet(lcd_list):
+    def multi_lcd_greet(lcd_list, **kwargs):
         for lcd, msg in lcd_list:
-            lcd.lcd_greet()
-            lcd.lcd_greet(msg)
+            lcd.lcd_greet(**kwargs)
+            lcd.lcd_greet(msg, **kwargs)
 
     @staticmethod
     def multi_lcd_cycle(lcd_list):
@@ -126,17 +126,16 @@ if __name__ == '__main__':
     from utils import Statuses, SensorData, PMS5003
     # Initialise display
     delay = int(raw_input())
-    C_DELAY = delay
     lcd1 = LCD1602()
     lcd2 = LCD1602(I2C_ADDR2)
     lcd1.lcd_init()
     lcd2.lcd_init()
     msg1 = 'DISPLAY_TYPE:\n' + 'STATUSES'.rjust(LCD_WIDTH)
     msg2 = 'DISPLAY_TYPE:\n' + 'SENSOR_DATA'.rjust(LCD_WIDTH)
-    LCD1602.multi_lcd_greet([(lcd1, msg1), (lcd2, msg2)])
+    LCD1602.multi_lcd_greet([(lcd1, msg1), (lcd2, msg2)], delay=delay)
     lcd_list = [(lcd1, (Statuses, SensorData)), (lcd2, (PMS5003,))]
     try:
-        LCD1602.multi_lcd_cycle(lcd_list)
+        LCD1602.multi_lcd_cycle(lcd_list, delay=delay)
     except KeyboardInterrupt:
         pass
     except Exception:
