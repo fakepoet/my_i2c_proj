@@ -13,8 +13,8 @@ class PMS5003(object):
             # 获得接收缓冲区字符
             count = ser.inWaiting()
             print count
-            if count >= 32:
-                recv = ser.read(32)
+            if count >= 40:
+                recv = ser.read(40)
                 print recv
                 print type(recv)
                 (sign1, sign2, frame_length, pm1_0_cf, pm2_5_cf, pm10_cf, pm1_0,
