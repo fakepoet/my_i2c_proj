@@ -101,8 +101,8 @@ class LCD1602(object):
             st = data_class()
             for func_name in get_methods_list(data_class):
                 msg = getattr(st, func_name)()
-                lcd.lcd_clear()
                 lcd.lcd_message(msg)
+                lcd.lcd_clear()
                 time.sleep(delay)
 
     @staticmethod

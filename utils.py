@@ -3,6 +3,7 @@
 from datetime import datetime
 import commands
 import psutil
+import time
 
 
 def get_methods_list(cls):
@@ -68,6 +69,9 @@ class SensorData(object):
             float(self.bmp_180.read_sealevel_pressure()) / 100
         ).rjust(16)
 
+    def try_get_dht_data(self):
+        return 'Trying:\n' + 'Get DHT data.'.rjust(16)
+
     def get_temp_dht_12(self):
         res, data = self.dht_12.read_data()
         if res:
@@ -83,6 +87,8 @@ class SensorData(object):
                     temp = 'Temp_DHT: {}\n'.format(temp)
                     humidity = 'Humidity: {}'.format(humidity)
                     return temp + humidity
+                else:
+                    time.sleep(2)
             msg = data
             return msg
 
