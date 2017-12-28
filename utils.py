@@ -56,14 +56,14 @@ class SensorData(object):
         return 'Temp:\n' + '{0.2f} {}C'.format(self.sensor.read_temperature(), chr(0xDF)).rjust(16)
 
     def get_pressure(self):
-        return 'Pressure:\n' + '{0.2f} MPa'.format(float(self.sensor.read_pressure()) / 1000).rjust(16)
+        return 'Pressure:\n' + '{0.2f} hPa'.format(float(self.sensor.read_pressure()) / 100).rjust(16)
 
     def get_altitude(self):
         return 'Altitude:\n' + '{0.2f} m'.format(self.sensor.read_altitude()).rjust(16)
 
     def get_sea_level_pressure(self):
-        return 'Sealevel Pressure:\n' + '{0.2f} MPa'.format(
-            float(self.sensor.read_sealevel_pressure()) / 1000
+        return 'Sealevel Pressure:\n' + '{0.2f} hPa'.format(
+            float(self.sensor.read_sealevel_pressure()) / 100
         ).rjust(16)
 
 # def getShort(data, index):
