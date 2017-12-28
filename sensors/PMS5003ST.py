@@ -23,7 +23,6 @@ class PMS5003(object):
 
                 if sign1 == 0x42 and sign2 == 0x4d:
                     break
-            ser.close()
             time.sleep(1)
         return dict(
             pm1_0=pm1_0,
