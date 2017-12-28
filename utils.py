@@ -69,7 +69,7 @@ class SensorData(object):
             float(self.bmp_180.read_sealevel_pressure()) / 100
         ).rjust(16)
 
-    def try_get_dht_data(self):
+    def get_temp_ctry(self):
         return 'Trying:\n' + 'Get DHT data.'.rjust(16)
 
     def get_temp_dht_12(self):
@@ -81,7 +81,7 @@ class SensorData(object):
             return temp + humidity
         else:
             for _ in range(15):
-                time.sleep(2)
+                time.sleep(4)
                 res, data = self.dht_12.read_data()
                 if res:
                     humidity, temp = data

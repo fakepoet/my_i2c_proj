@@ -125,10 +125,12 @@ class LCD1602(object):
 if __name__ == '__main__':
     from utils import Statuses, SensorData
     # Initialise display
+    delay = int(raw_input())
     lcd1 = LCD1602()
     lcd2 = LCD1602(I2C_ADDR2)
     lcd1.lcd_init()
     lcd2.lcd_init()
+    C_DELAY = delay
     msg1 = 'DISPLAY_TYPE:\n' + 'STATUSES'.rjust(LCD_WIDTH)
     msg2 = 'DISPLAY_TYPE:\n' + 'SENSOR_DATA'.rjust(LCD_WIDTH)
     LCD1602.multi_lcd_greet([(lcd1, msg1), (lcd2, msg2)])
