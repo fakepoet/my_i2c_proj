@@ -8,7 +8,7 @@ bus = smbus.SMBus(1)  # Rev 2 Pi uses 1
 
 
 class DHT12(object):
-    def init(self, addr=DEVICE_ADDR):
+    def __init__(self, addr=DEVICE_ADDR):
         self.addr = addr
 
     def read_data(self):
