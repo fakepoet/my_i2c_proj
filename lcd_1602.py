@@ -123,7 +123,7 @@ class LCD1602(object):
 
 
 if __name__ == '__main__':
-    from utils import Statuses, SensorData
+    from utils import Statuses, SensorData, PMS5003
     # Initialise display
     delay = int(raw_input())
     C_DELAY = delay
@@ -134,7 +134,7 @@ if __name__ == '__main__':
     msg1 = 'DISPLAY_TYPE:\n' + 'STATUSES'.rjust(LCD_WIDTH)
     msg2 = 'DISPLAY_TYPE:\n' + 'SENSOR_DATA'.rjust(LCD_WIDTH)
     LCD1602.multi_lcd_greet([(lcd1, msg1), (lcd2, msg2)])
-    lcd_list = [(lcd1, (Statuses,)), (lcd2, (SensorData,))]
+    lcd_list = [(lcd1, (Statuses, SensorData)), (lcd2, (PMS5003,))]
     try:
         LCD1602.multi_lcd_cycle(lcd_list)
     except KeyboardInterrupt:

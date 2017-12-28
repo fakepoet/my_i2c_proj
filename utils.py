@@ -69,6 +69,33 @@ class SensorData(object):
         ).rjust(16)
 
 
+class PMS5003(object):
+    def __init__(self):
+        from sensors.PMS5003ST import pms5003
+        self.data = pms5003.get_data()
+
+    def get_pm2_5(self):
+        pm2_5 = self.data['pm2_5']
+        return 'PM2.5:\n' + '{:.2f} ug/m3'.format(pm2_5).rjust(16)
+
+    def get_pm10_pm1_0(self):
+        pm10 = self.data['pm10']
+        pm1_0 = self.data['pm1_0']
+        msg1 = 'PM1.0:' + '{:.2f} ug/m3\n'.format(pm1_0).rjust(10)
+        msg2 = 'PM10:' + '{:.2f} ug/m3\n'.format(pm10).rjust(11)
+        return msg1 + msg2
+
+    def get_hcho(self):
+        hcho = self.data['hcho']
+        return 'HCHO:\n' + '{:.2f} mg/m3'.format(hcho).rjust(16)
+
+    def get_temp_and_humidity(self):
+        temp = self.data['temp']
+        humidity = self.data['humidity']
+        msg1 = 'Temp: {:.2f} {}C\n'.format(temp, chr(0xDF)).rjust(16)
+        msg2 = 'Humi: {:.2f}%'.format(humidity).rjust(16)
+        return msg1 + msg2
+
 # def getShort(data, index):
 #     # return two bytes from data as a signed 16-bit value
 #     return c_short((data[index] << 8) + data[index + 1]).value
