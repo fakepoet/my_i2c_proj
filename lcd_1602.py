@@ -112,10 +112,10 @@ class LCD1602(object):
             lcd.lcd_greet(msg, **kwargs)
 
     @staticmethod
-    def multi_lcd_cycle(lcd_list):
+    def multi_lcd_cycle(lcd_list, **kwargs):
         while True:
             for lcd, cls_list in lcd_list:
-                LCD1602.cycle_cls_list(lcd, cls_list)
+                LCD1602.cycle_cls_list(lcd, cls_list, **kwargs)
 
     def lcd_greet(self, msg=None, delay=C_DELAY):
         self.lcd_message(msg or 'Hello,\n        Master')
