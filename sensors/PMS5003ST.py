@@ -13,7 +13,8 @@ class PMS5003(object):
             count = self.ser.inWaiting()
             if count >= 32:
                 recv = self.ser.read(32)
-
+                print recv
+                print type(recv)
                 (sign1, sign2, frame_length, pm1_0_cf, pm2_5_cf, pm10_cf, pm1_0,
                  pm2_5, pm10, cnt_03, cnt_05, cnt_10, cnt_25, cnt_50, cnt_100,
                  hcho, temp, humidity, reserve, version, checksum) = struct.unpack('>bb' + 'H' * 19, recv)
