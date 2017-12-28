@@ -6,14 +6,15 @@ import struct
 
 class PMS5003(object):
 
-    def get_data(self):
+    @staticmethod
+    def get_data():
         while True:
             # 获得接收缓冲区字符
-            self.ser = serial.Serial("/dev/ttyS0", 9600)
-            count = self.ser.inWaiting()
+            ser = serial.Serial("/dev/ttyS0", 9600)
+            count = ser.inWaiting()
             print count
             if count >= 32:
-                recv = self.ser.read(32)
+                recv = ser.read(32)
                 print recv
                 print type(recv)
                 (sign1, sign2, frame_length, pm1_0_cf, pm2_5_cf, pm10_cf, pm1_0,
@@ -22,7 +23,7 @@ class PMS5003(object):
 
                 if sign1 == 0x42 and sign2 == 0x4d:
                     break
-            self.ser.close()
+            ser.close()
             time.sleep(1)
         return dict(
             pm1_0=pm1_0,
@@ -32,6 +33,3 @@ class PMS5003(object):
             temp=float(temp) / 10,
             humidity=(humidity) / 10
         )
-
-
-pms5003 = PMS5003()
