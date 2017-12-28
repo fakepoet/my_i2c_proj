@@ -4,7 +4,8 @@ import smbus
 import time
 
 # Define some device parameters
-I2C_ADDR = 0x27  # I2CLCD device address
+I2C_ADDR1 = 0x27  # I2CLCD device address
+I2C_ADDR2 = 0x26
 LCD_WIDTH = 16   # Maximum characters per line
 
 # Define some device constants
@@ -30,10 +31,11 @@ C_DELAY = 5
 
 
 class LCD1206(object):
-    def __init__(self):
+    def __init__(self, addr=I2C_ADDR1):
         # Open I2C interface
         # bus = smbus.SMBus(0)  # Rev 1 Pi uses 0
         self.bus = smbus.SMBus(1)  # Rev 2 Pi uses 1
+        self.addr = addr
 
     def lcd_init(self):
         # Initialise display
@@ -55,19 +57,19 @@ class LCD1206(object):
         bits_low = mode | ((bits << 4) & 0xF0) | LCD_BACKLIGHT
 
         # High bits
-        self.bus.write_byte(I2C_ADDR, bits_high)
+        self.bus.write_byte(self.addr, bits_high)
         self.lcd_toggle_enable(bits_high)
 
         # Low bits
-        self.bus.write_byte(I2C_ADDR, bits_low)
+        self.bus.write_byte(self.addr, bits_low)
         self.lcd_toggle_enable(bits_low)
 
     def lcd_toggle_enable(self, bits):
         # Toggle enable
         time.sleep(E_DELAY)
-        self.bus.write_byte(I2C_ADDR, (bits | ENABLE))
+        self.bus.write_byte(self.addr, (bits | ENABLE))
         time.sleep(E_PULSE)
-        self.bus.write_byte(I2C_ADDR, (bits & ~ENABLE))
+        self.bus.write_byte(self.addr, (bits & ~ENABLE))
         time.sleep(E_DELAY)
 
     def lcd_string(self, message, line):
@@ -89,16 +91,31 @@ class LCD1206(object):
         self.lcd_byte(0x01, LCD_CMD)
 
     def lcd_cycle(self, *cls_list, **kwargs):
-        from utils import get_methods_list
-        delay = kwargs.get('delay') or C_DELAY
         while True:
-            for data_class in cls_list:
-                st = data_class()
-                for func_name in get_methods_list(data_class):
-                    msg = getattr(st, func_name)()
-                    self.lcd_clear()
-                    self.lcd_message(msg)
-                    time.sleep(delay)
+            LCD1206.cycle_cls_list(self, *cls_list, **kwargs)
+
+    @staticmethod
+    def cycle_cls_list(lcd, cls_list, delay=C_DELAY):
+        from utils import get_methods_list
+        for data_class in cls_list:
+            st = data_class()
+            for func_name in get_methods_list(data_class):
+                msg = getattr(st, func_name)()
+                lcd.lcd_clear()
+                lcd.lcd_message(msg)
+                time.sleep(delay)
+
+    @staticmethod
+    def multi_lcd_greet(lcd_list):
+        for lcd, msg in lcd_list:
+            lcd.lcd_greet()
+            lcd.lcd_greet(msg)
+
+    @staticmethod
+    def multi_lcd_cycle(lcd_list):
+        while True:
+            for lcd, cls_list in lcd_list:
+                LCD1206.cycle_cls_list(lcd, cls_list)
 
     def lcd_greet(self, msg=None, delay=C_DELAY):
         self.lcd_message(msg or 'Hello,\n        Master')
@@ -108,14 +125,18 @@ class LCD1206(object):
 if __name__ == '__main__':
     from utils import Statuses, SensorData
     # Initialise display
-    dev = LCD1206()
-    dev.lcd_init()
-    dev.lcd_greet()
+    lcd1 = LCD1206()
+    lcd2 = LCD1206(I2C_ADDR2)
+    msg1 = 'DISPLAY_TYPE:\n' + 'STATUSES'.rjust(LCD_WIDTH)
+    msg2 = 'DISPLAY_TYPE:\n' + 'SENSOR_DATA'.rjust(LCD_WIDTH)
+    LCD1206.multi_lcd_greet([(lcd1, msg1), (lcd2, msg2)])
+    lcd_list = [(lcd1, (Statuses,)), (lcd2, (SensorData,))]
     try:
-        dev.lcd_cycle(Statuses, SensorData)
+        LCD1206.multi_lcd_cycle(lcd_list)
     except KeyboardInterrupt:
         pass
     except Exception:
         raise
     finally:
-        dev.lcd_byte(0x01, LCD_CMD)
+        lcd1.lcd_byte(0x01, LCD_CMD)
+        lcd2.lcd_byte(0x01, LCD_CMD)

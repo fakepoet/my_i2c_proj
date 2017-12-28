@@ -50,21 +50,34 @@ class SensorData(object):
 
     def __init__(self):
         from sensors.bmp_180 import sensor
-        self.sensor = sensor
+        from sensors.DHT_12 import dht_12
+        self.bmp_180 = sensor
+        self.dht_12 = dht_12
 
     def get_temp(self):
-        return 'Temperature:\n' + '{:.2f} {}C'.format(self.sensor.read_temperature(), chr(0xDF)).rjust(16)
+        return 'Temp_BMP:\n' + '{:.2f} {}C'.format(self.bmp_180.read_temperature(), chr(0xDF)).rjust(16)
 
     def get_pressure(self):
-        return 'Pressure:\n' + '{:.2f} hPa'.format(float(self.sensor.read_pressure()) / 100).rjust(16)
+        return 'Pressure:\n' + '{:.2f} hPa'.format(float(self.bmp_180.read_pressure()) / 100).rjust(16)
 
     def get_altitude(self):
-        return 'Altitude:\n' + '{:.2f} m'.format(self.sensor.read_altitude()).rjust(16)
+        return 'Altitude:\n' + '{:.2f} m'.format(self.bmp_180.read_altitude()).rjust(16)
 
     def get_sea_level_pressure(self):
         return 'Sealevel Pressure:\n' + '{:.2f} hPa'.format(
-            float(self.sensor.read_sealevel_pressure()) / 100
+            float(self.bmp_180.read_sealevel_pressure()) / 100
         ).rjust(16)
+
+    def get_temp_dht_12(self):
+        res, data = self.dht_12.read_data()
+        if res:
+            humidity, temp = data
+            temp = 'Temp_DHT: {}\n'.format(temp)
+            humidity = 'Humidity: {}'.format(humidity)
+            return temp + humidity
+        else:
+            msg = data
+            return msg
 
 # def getShort(data, index):
 #     # return two bytes from data as a signed 16-bit value
