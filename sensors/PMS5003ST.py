@@ -34,5 +34,5 @@ class PMS5003(object):
                 pm10=pm10,
                 hcho=float(hcho) / 1000,
                 temp=float(temp) / 10,
-                humidity=(humidity) / 10
+                humidity=float(humidity) / 10
             )
