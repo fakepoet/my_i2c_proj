@@ -71,8 +71,8 @@ class SensorData(object):
 
 class PMS5003(object):
     def __init__(self):
-        from sensors import PMS5003ST
-        self.data = PMS5003ST.get_data()
+        from sensors.PMS5003ST import PMS5003 as P
+        self.data = P.get_data()
 
     def get_pm2_5(self):
         pm2_5 = self.data['pm2_5']
