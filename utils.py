@@ -93,8 +93,8 @@ class PMS5003(object):
     def get_temp_and_humidity(self):
         temp = self.data['temp']
         humidity = self.data['humidity']
-        msg1 = 'Temp:' + '{:.2f} {}C\n'.format(temp, chr(0xDF)).rjust(16)
-        msg2 = 'Humi:' + '{:.2f}%'.format(humidity).rjust(16)
+        msg1 = 'Temp:' + '{:.2f} {}C\n'.format(temp, chr(0xDF)).rjust(11)
+        msg2 = 'Humi:' + '{:.2f}%'.format(humidity).rjust(11)
         return msg1 + msg2
 
 # def getShort(data, index):
