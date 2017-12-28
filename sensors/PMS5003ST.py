@@ -1,6 +1,5 @@
 # coding: utf-8
 import serial
-import time
 import struct
 
 
@@ -32,13 +31,9 @@ class PMS5003(object):
             if ord(sign2) != 0x4d:
                 continue
 
-            count = ser.inWaiting()
-            while count < 38:
-                time.sleep(0.2)
-                count = ser.inWaiting()
             recv = ser.read(38)
             if not check_data(ord(sign1), ord(sign2), recv):
-                continue
+                print 'check failed.'
             (frame_length, pm1_0_cf, pm2_5_cf, pm10_cf, pm1_0,
              pm2_5, pm10, cnt_03, cnt_05, cnt_10, cnt_25, cnt_50, cnt_100,
              hcho, temp, humidity, reserve, version, checksum) = struct.unpack('>' + 'H' * 19, recv)
