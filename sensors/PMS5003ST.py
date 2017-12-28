@@ -10,9 +10,13 @@ class PMS5003(object):
     def get_data():
         def check_data(sign1, sign2, recv):
             data_list = list(struct.unpack('>' + 'b' * 36 + 'H', recv))
+            print 'data_list: %s' % data_list
             check_flag = data_list.pop()
+            print 'check_flag: %s' % check_flag
             data_list.append(sign1)
             data_list.append(sign2)
+            print 'data_list: %s' % data_list
+            print sum(data_list)
             if sum(data_list) != check_flag:
                 return False
             return True
