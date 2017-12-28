@@ -8,7 +8,7 @@ class PMS5003(object):
     @staticmethod
     def get_data():
         def check_data(sign1, sign2, recv):
-            data_list = list(struct.unpack('>' + 'b' * 36 + 'H', recv))
+            data_list = list(struct.unpack('>' + 'B' * 36 + 'H', recv))
             print 'data_list: %s' % data_list
             check_flag = data_list.pop()
             print 'check_flag: %s' % check_flag
