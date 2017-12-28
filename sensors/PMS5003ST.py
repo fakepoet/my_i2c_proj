@@ -8,9 +8,9 @@ class PMS5003(object):
 
     @staticmethod
     def get_data():
+        ser = serial.Serial("/dev/ttyS0", 9600)
         while True:
             # 获得接收缓冲区字符
-            ser = serial.Serial("/dev/ttyS0", 9600)
             count = ser.inWaiting()
             print count
             if count >= 32:
