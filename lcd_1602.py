@@ -114,11 +114,9 @@ class LCD1602(object):
 
     @staticmethod
     def multi_lcd_cycle(lcd_list, **kwargs):
-        from multiprocessing import Pool
-        pool = Pool(processes=len(lcd_list))
+        from multiprocessing import Process
         for lcd, cls_list in lcd_list:
-            pool.apply(LCD1602.cycle_cls_list, args=(lcd, cls_list), kwds=kwargs)
-        pool.join()
+            Process(target=LCD1602.cycle_cls_list, args=(lcd, cls_list), kwargs=kwargs).start()
 
     def lcd_greet(self, msg=None, delay=C_DELAY):
         self.lcd_message(msg or 'Hello,\n        Master')
