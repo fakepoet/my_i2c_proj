@@ -88,7 +88,7 @@ class PMS5003(object):
 
     def get_hcho(self):
         hcho = self.data['hcho']
-        return 'HCHO:(max:0.4)\n' + '{:.2f} mg/m3'.format(hcho).rjust(16)
+        return 'HCHO:(max:0.08)\n' + '{:.2f} mg/m3'.format(hcho).rjust(16)
 
     def get_temp_and_humidity(self):
         temp = self.data['temp']
