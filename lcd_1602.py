@@ -97,13 +97,14 @@ class LCD1602(object):
     @staticmethod
     def cycle_cls_list(lcd, cls_list, delay=C_DELAY):
         from utils import get_methods_list
-        for data_class in cls_list:
-            st = data_class()
-            for func_name in get_methods_list(data_class):
-                msg = getattr(st, func_name)()
-                lcd.lcd_clear()
-                lcd.lcd_message(msg)
-                time.sleep(delay)
+        while True:
+            for data_class in cls_list:
+                st = data_class()
+                for func_name in get_methods_list(data_class):
+                    msg = getattr(st, func_name)()
+                    lcd.lcd_clear()
+                    lcd.lcd_message(msg)
+                    time.sleep(delay)
 
     @staticmethod
     def multi_lcd_greet(lcd_list, **kwargs):
@@ -113,9 +114,11 @@ class LCD1602(object):
 
     @staticmethod
     def multi_lcd_cycle(lcd_list, **kwargs):
-        while True:
-            for lcd, cls_list in lcd_list:
-                LCD1602.cycle_cls_list(lcd, cls_list, **kwargs)
+        from multiprocessing import Pool
+        pool = Pool(processes=len(lcd_list))
+        for lcd, cls_list in lcd_list:
+            pool.apply_async(LCD1602.cycle_cls_list, args=(lcd, cls_list), kwargs=kwargs)
+        pool.join()
 
     def lcd_greet(self, msg=None, delay=C_DELAY):
         self.lcd_message(msg or 'Hello,\n        Master')
