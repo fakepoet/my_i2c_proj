@@ -117,7 +117,7 @@ class LCD1602(object):
         from multiprocessing import Pool
         pool = Pool(processes=len(lcd_list))
         for lcd, cls_list in lcd_list:
-            pool.apply_async(LCD1602.cycle_cls_list, args=(lcd, cls_list), kwargs=kwargs)
+            pool.apply_async(LCD1602.cycle_cls_list, args=(lcd, cls_list), kwds=kwargs)
         pool.join()
 
     def lcd_greet(self, msg=None, delay=C_DELAY):
