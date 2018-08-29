@@ -76,11 +76,11 @@ class PMS5003(object):
 
     def get_pm2_5(self):
         pm2_5 = self.data['pm2_5']
-        return 'PM2.5:\n' + '{:.2f} ug/m3'.format(pm2_5).rjust(16)
+        return 'PM2.5:(35:75)\n' + '{:.2f} ug/m3'.format(pm2_5).rjust(16)
 
     def get_pm10(self):
         pm10 = self.data['pm10']
-        return 'PM10:\n' + '{:.2f} ug/m3\n'.format(pm10).rjust(16)
+        return 'PM10:(max:50)\n' + '{:.2f} ug/m3\n'.format(pm10).rjust(16)
 
     def get_pm1_0(self):
         pm1_0 = self.data['pm1_0']
@@ -88,7 +88,7 @@ class PMS5003(object):
 
     def get_hcho(self):
         hcho = self.data['hcho']
-        return 'HCHO:\n' + '{:.2f} mg/m3'.format(hcho).rjust(16)
+        return 'HCHO:(max:0.4)\n' + '{:.2f} mg/m3'.format(hcho).rjust(16)
 
     def get_temp_and_humidity(self):
         temp = self.data['temp']
